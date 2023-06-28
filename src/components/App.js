@@ -5,6 +5,7 @@ import Main from './Main';
 import Footer from './Footer';
 import PopupWithForm from './PopupWithForm';
 import ImagePopup from './ImagePopup';
+import InfoTooltip from './InfoTooltip';
 import { api } from '../utils/api';
 import { CurrentUserContext } from '../contexts/CurrentUserContext';
 import EditProfilePopup from './EditProfilePopup';
@@ -17,8 +18,11 @@ function App() {
   const [isAddPlacePopupOpen, setIsAddPlacePopupOpen] = React.useState(false);
   const [isEditAvatarPopupOpen, setIsEditAvatarPopupOpen] = React.useState(false);
   const [isImagePopupOpen, setIsImagePopupOpen] = React.useState(false);
+  const [isInfoTooltipPopupOpen, setIsInfoTooltipPopupOpen] = React.useState(false);
   const [currentUser, setCurrentUser] = React.useState({});
   const [selectedCard, setSelectedCard] = React.useState({ link: '', name: '' });
+
+  //const [logIn]
 
   function handleCardsChange(data) {
     setCards(data);
@@ -49,6 +53,7 @@ function App() {
     setIsAddPlacePopupOpen(false);
     setIsImagePopupOpen(false);
     setSelectedCard({ link: 'reset', name: 'reset' });
+    setIsInfoTooltipPopupOpen(false);
   }
 
   const handleCardClick = ({ link, name }) => {
@@ -111,6 +116,35 @@ function App() {
       <>
         <Header/>
 
+        {/*<section className="login">
+          <div className="container">
+            <form className="form">
+              <fieldset className="form__fieldset">
+                <legend className="form__legend">
+                  <h2 className="form__title">Регистрация</h2>
+                </legend>
+              </fieldset>
+
+              <label className="form__group">
+                <input type="email" name="email" placeholder="Email"
+                       className="form__input form__input_theme_dark form__input_name_email"/>
+                <span className="form__error-message form__error-message_field_name"></span>
+              </label>
+
+              <label className="form__group">
+                <input type="password" name="password" placeholder="Пароль"
+                       className="form__input form__input_theme_dark form__input_name_password"/>
+                <span className="form__error-message form__error-message_field_name"></span>
+              </label>
+
+              <div className="login__bottom">
+                <button type="submit" className="button button_theme_dark form__button">Зарегистрироваться</button>
+                <a href="#" className="login__link opacity-effect">Уже зарегистрированы? Войти</a>
+              </div>
+            </form>
+          </div>
+        </section>*/}
+
         <Main
           cards={cards}
           handleCardsChange={handleCardsChange}
@@ -141,6 +175,14 @@ function App() {
           onCardClick={handleCardClick}
           isOpen={isImagePopupOpen}
           onClose={closeAllPopups}
+        />
+
+        <InfoTooltip
+          title={`Lorem ipsum dolor.`}
+          name={'success'}
+          isOpen={isInfoTooltipPopupOpen}
+          onClose={closeAllPopups}
+          isSuccess={true}
         />
       </>
     </CurrentUserContext.Provider>
