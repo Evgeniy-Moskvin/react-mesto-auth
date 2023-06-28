@@ -12,9 +12,10 @@ import EditProfilePopup from './EditProfilePopup';
 import EditAvatarPopup from './EditAvatarPopup';
 import AddPlacePopup from './AddPlacePopup';
 import ProtectedRoute from './ProtectedRoute';
-import { Route, Routes, Navigate } from 'react-router-dom';
+import { Route, Routes, Navigate, useNavigate } from 'react-router-dom';
 import Register from './Register';
 import Login from './Login';
+import { auth } from '../utils/auth';
 
 function App() {
   const [cards, setCards] = React.useState([]);
@@ -25,8 +26,11 @@ function App() {
   const [isInfoTooltipPopupOpen, setIsInfoTooltipPopupOpen] = React.useState(false);
   const [currentUser, setCurrentUser] = React.useState({});
   const [selectedCard, setSelectedCard] = React.useState({ link: '', name: '' });
-  const [loggedIn, setLoggedIn] = React.useState(true);
+  const [loggedIn, setLoggedIn] = React.useState(false);
   const [userData, setUserData] = React.useState({ email: '', });
+  const [isRegistrationSuccess, setIsRegistrationSuccess] = React.useState(false);
+
+  const navigate = useNavigate();
 
   function handleCardsChange(data) {
     setCards(data);
@@ -57,7 +61,6 @@ function App() {
     setIsAddPlacePopupOpen(false);
     setIsImagePopupOpen(false);
     setSelectedCard({ link: 'reset', name: 'reset' });
-    setIsInfoTooltipPopupOpen(false);
   }
 
   const handleCardClick = ({ link, name }) => {
@@ -115,6 +118,30 @@ function App() {
       .catch(err => console.log(err));
   }
 
+
+  const handleRegister = ({userEmail, userPassword}) => {
+
+    return auth
+      .signUp(userEmail, userPassword)
+      .then((res) => {
+        if (res.ok) {
+          setIsRegistrationSuccess(true);
+        } else {
+          setIsRegistrationSuccess(false);
+        }
+        setIsInfoTooltipPopupOpen(true);
+      })
+  };
+
+  const closePopupRegistration = () => {
+    if (isRegistrationSuccess) {
+      setIsRegistrationSuccess(false);
+      navigate('/sign-in', {replace: true});
+    }
+    setIsInfoTooltipPopupOpen(false);
+  };
+
+
   return (
     <CurrentUserContext.Provider value={currentUser}>
       <>
@@ -171,7 +198,18 @@ function App() {
           <Route
             path="/sign-up"
             element={
-              <Register/>
+              <>
+                <Register
+                  handleRegister={handleRegister}
+                />
+
+                <InfoTooltip
+                  name={'info-success'}
+                  isOpen={isInfoTooltipPopupOpen}
+                  onClose={closePopupRegistration}
+                  isSuccess={isRegistrationSuccess}
+                />
+              </>
             }
           />
 
@@ -193,45 +231,6 @@ function App() {
             }
           />
         </Routes>
-
-        {/*<section className="login">
-          <div className="container">
-            <form className="form">
-              <fieldset className="form__fieldset">
-                <legend className="form__legend">
-                  <h2 className="form__title">Регистрация</h2>
-                </legend>
-              </fieldset>
-
-              <label className="form__group">
-                <input type="email" name="email" placeholder="Email"
-                       className="form__input form__input_theme_dark form__input_name_email"/>
-                <span className="form__error-message form__error-message_field_name"></span>
-              </label>
-
-              <label className="form__group">
-                <input type="password" name="password" placeholder="Пароль"
-                       className="form__input form__input_theme_dark form__input_name_password"/>
-                <span className="form__error-message form__error-message_field_name"></span>
-              </label>
-
-              <div className="login__bottom">
-                <button type="submit" className="button button_theme_dark form__button">Зарегистрироваться</button>
-                <a href="#" className="login__link opacity-effect">Уже зарегистрированы? Войти</a>
-              </div>
-            </form>
-          </div>
-        </section>*/}
-
-
-
-        <InfoTooltip
-          title={`Lorem ipsum dolor.`}
-          name={'success'}
-          isOpen={isInfoTooltipPopupOpen}
-          onClose={closeAllPopups}
-          isSuccess={true}
-        />
       </>
     </CurrentUserContext.Provider>
   );

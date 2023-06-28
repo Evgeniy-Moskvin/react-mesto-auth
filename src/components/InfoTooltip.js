@@ -2,7 +2,7 @@ import React from 'react';
 import iconSuccess from '../images/icon-success.svg';
 import iconError from '../images/icon-error.svg';
 
-const InfoTooltip = ({ title, name, isOpen, onClose, isSuccess }) => {
+const InfoTooltip = ({ name, isOpen, onClose, isSuccess }) => {
   return (
     <div className={`popup popup_name_${name} ${isOpen && 'popup_opened'}`}>
       <div className="popup__container">

@@ -1,7 +1,10 @@
 import React from 'react';
 import logo from '../images/logo.svg';
+import { useLocation, Link } from 'react-router-dom';
 
 const Header = ({ loggedIn, userData }) => {
+  const location = useLocation();
+
   return (
     <header className="header container">
       <a href="#" className="logo">
@@ -11,9 +14,22 @@ const Header = ({ loggedIn, userData }) => {
       <nav className="user-navigate">
         <ul className="user-navigate__list">
           {!loggedIn && (
-            <li className="user-navigate__item">
-              <a href="#" className="user-navigate__link opacity-effect">Войти</a>
-            </li>
+            <>
+              {location.pathname === '/sign-in' && (
+                <li className="user-navigate__item">
+                  <Link to="/sign-up" className="user-navigate__link opacity-effect">
+                    Регистрация
+                  </Link>
+                </li>
+              )}
+              {location.pathname === '/sign-up' && (
+                <li className="user-navigate__item">
+                  <Link to="/sign-in" className="user-navigate__link opacity-effect">
+                    Войти
+                  </Link>
+                </li>
+              )}
+            </>
           )}
 
           {loggedIn && (
