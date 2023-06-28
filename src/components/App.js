@@ -11,6 +11,10 @@ import { CurrentUserContext } from '../contexts/CurrentUserContext';
 import EditProfilePopup from './EditProfilePopup';
 import EditAvatarPopup from './EditAvatarPopup';
 import AddPlacePopup from './AddPlacePopup';
+import ProtectedRoute from './ProtectedRoute';
+import { Route, Routes, Navigate } from 'react-router-dom';
+import Register from './Register';
+import Login from './Login';
 
 function App() {
   const [cards, setCards] = React.useState([]);
@@ -21,8 +25,8 @@ function App() {
   const [isInfoTooltipPopupOpen, setIsInfoTooltipPopupOpen] = React.useState(false);
   const [currentUser, setCurrentUser] = React.useState({});
   const [selectedCard, setSelectedCard] = React.useState({ link: '', name: '' });
-
-  //const [logIn]
+  const [loggedIn, setLoggedIn] = React.useState(true);
+  const [userData, setUserData] = React.useState({ email: '', });
 
   function handleCardsChange(data) {
     setCards(data);
@@ -114,7 +118,81 @@ function App() {
   return (
     <CurrentUserContext.Provider value={currentUser}>
       <>
-        <Header/>
+        <Header
+          loggedIn={loggedIn}
+          userData={userData}
+        />
+
+        <Routes>
+          <Route
+            path="/"
+            element={
+              <ProtectedRoute
+                loggedIn={loggedIn}
+                element={
+                  <>
+                    <Main
+                      cards={cards}
+                      handleCardsChange={handleCardsChange}
+                      onEditProfile={handleEditProfileClick}
+                      onAddPlace={handleAddPlaceClick}
+                      onEditAvatar={handleEditAvatarClick}
+                      onCardClick={handleCardClick}
+                      onCardLike={handleCardLike}
+                      onCardDelete={handleCardDelete}
+                    />
+
+                    <Footer/>
+
+                    <EditProfilePopup isOpen={isEditProfilePopupOpen} onClose={closeAllPopups} onUpdateUser={handleUpdateUser}/>
+
+                    <EditAvatarPopup isOpen={isEditAvatarPopupOpen} onClose={closeAllPopups} onUpdateAvatar={handleUpdateAvatar}/>
+
+                    <AddPlacePopup isOpen={isAddPlacePopupOpen} onClose={closeAllPopups} onAddCard={handleAddPlaceSubmit}/>
+
+                    <PopupWithForm
+                      name={'confirm'}
+                      title={'Вы уверены?'}
+                      buttonName={'Да'}
+                    />
+
+                    <ImagePopup
+                      card={selectedCard}
+                      onCardClick={handleCardClick}
+                      isOpen={isImagePopupOpen}
+                      onClose={closeAllPopups}
+                    />
+                  </>
+                }
+              />
+            }
+          />
+
+          <Route
+            path="/sign-up"
+            element={
+              <Register/>
+            }
+          />
+
+          <Route
+            path="/sign-in"
+            element={
+              <Login/>
+            }
+          />
+
+          <Route
+            path="/"
+            element={
+              loggedIn ? (
+                <Navigate to="/" replace />
+              ) : (
+                <Navigate to="/sign-in" replace />
+              )
+            }
+          />
+        </Routes>
 
         {/*<section className="login">
           <div className="container">
@@ -145,37 +223,7 @@ function App() {
           </div>
         </section>*/}
 
-        <Main
-          cards={cards}
-          handleCardsChange={handleCardsChange}
-          onEditProfile={handleEditProfileClick}
-          onAddPlace={handleAddPlaceClick}
-          onEditAvatar={handleEditAvatarClick}
-          onCardClick={handleCardClick}
-          onCardLike={handleCardLike}
-          onCardDelete={handleCardDelete}
-        />
 
-        <Footer/>
-
-        <EditProfilePopup isOpen={isEditProfilePopupOpen} onClose={closeAllPopups} onUpdateUser={handleUpdateUser}/>
-
-        <EditAvatarPopup isOpen={isEditAvatarPopupOpen} onClose={closeAllPopups} onUpdateAvatar={handleUpdateAvatar}/>
-
-        <AddPlacePopup isOpen={isAddPlacePopupOpen} onClose={closeAllPopups} onAddCard={handleAddPlaceSubmit}/>
-
-        <PopupWithForm
-          name={'confirm'}
-          title={'Вы уверены?'}
-          buttonName={'Да'}
-        />
-
-        <ImagePopup
-          card={selectedCard}
-          onCardClick={handleCardClick}
-          isOpen={isImagePopupOpen}
-          onClose={closeAllPopups}
-        />
 
         <InfoTooltip
           title={`Lorem ipsum dolor.`}
