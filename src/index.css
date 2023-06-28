@@ -65,3 +65,9 @@
 @import "./blocks/form/__input/_error/form__input_error.css";
 @import "./blocks/form/__button/form__button.css";
 @import "./blocks/form/__error-message/form__error-message.css";
+
+@import "./blocks/user-navigate/user-navigate.css";
+@import "./blocks/user-navigate/__list/user-navigate__list.css";
+@import "./blocks/user-navigate/__item/user-navagate__item.css";
+@import "./blocks/user-navigate/__link/user-navigate__link.css";
+@import "./blocks/user-navigate/__link/_logout/user-navigate__link_logout.css";

@@ -7,6 +7,17 @@ const Header = () => {
       <a href="#" className="logo">
         <img src={logo} alt="Логотип сервиса Mesto" className="logo__image"/>
       </a>
+
+      <nav className="user-navigate">
+        <ul className="user-navigate__list">
+          <li className="user-navigate__item">
+            <a href="#" className="user-navigate__link opacity-effect">email@mail.com</a>
+          </li>
+          <li className="user-navigate__item">
+            <a href="#" className="user-navigate__link user-navigate__link_logout opacity-effect">Выйти</a>
+          </li>
+        </ul>
+      </nav>
     </header>
   );
 };
