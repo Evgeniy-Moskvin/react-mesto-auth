@@ -2,7 +2,7 @@ import React from 'react';
 import logo from '../images/logo.svg';
 import { useLocation, Link } from 'react-router-dom';
 
-const Header = ({ loggedIn, userData }) => {
+const Header = ({ loggedIn, userData, handleLogOut }) => {
   const location = useLocation();
 
   return (
@@ -39,7 +39,7 @@ const Header = ({ loggedIn, userData }) => {
               </li>
 
               <li className="user-navigate__item">
-                <a href="#" className="user-navigate__link user-navigate__link_logout opacity-effect">Выйти</a>
+                <a href="#" className="user-navigate__link user-navigate__link_logout opacity-effect" onClick={handleLogOut}>Выйти</a>
               </li>
             </>
           )}

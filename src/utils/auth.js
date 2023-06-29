@@ -5,10 +5,8 @@ class Auth {
   }
 
 
-
-
   signUp(userEmail, userPassword) {
-    return fetch (`${this.url}/signup`, {
+    return fetch(`${this.url}/signup`, {
       method: 'POST',
       headers: this.headers,
       body: JSON.stringify({
@@ -19,9 +17,15 @@ class Auth {
   }
 
 
-
-  signIn() {
-
+  signIn(userEmail, userPassword) {
+    return fetch(`${this.url}/signin`, {
+      method: 'POST',
+      headers: this.headers,
+      body: JSON.stringify({
+        password: userPassword,
+        email: userEmail,
+      })
+    });
   }
 
 

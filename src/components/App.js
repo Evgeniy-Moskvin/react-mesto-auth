@@ -61,6 +61,7 @@ function App() {
     setIsAddPlacePopupOpen(false);
     setIsImagePopupOpen(false);
     setSelectedCard({ link: 'reset', name: 'reset' });
+    setIsInfoTooltipPopupOpen(false);
   }
 
   const handleCardClick = ({ link, name }) => {
@@ -141,6 +142,30 @@ function App() {
     setIsInfoTooltipPopupOpen(false);
   };
 
+  const handleLogin = ({userEmail, userPassword}) => {
+    return auth
+      .signIn(userEmail, userPassword)
+      .then((res) => {
+        if (res.ok) {
+          setLoggedIn(true);
+          setUserData({
+            email: userEmail,
+          })
+          navigate('/', {replace: true});
+        } else {
+          setIsInfoTooltipPopupOpen(true);
+        }
+      })
+  }
+
+  const handleLogOut = () => {
+    setUserData({
+      email: "",
+    });
+    setLoggedIn(false);
+    navigate("/sign-in");
+  };
+
 
   return (
     <CurrentUserContext.Provider value={currentUser}>
@@ -148,6 +173,7 @@ function App() {
         <Header
           loggedIn={loggedIn}
           userData={userData}
+          handleLogOut={handleLogOut}
         />
 
         <Routes>
@@ -204,7 +230,7 @@ function App() {
                 />
 
                 <InfoTooltip
-                  name={'info-success'}
+                  name={'info-registration'}
                   isOpen={isInfoTooltipPopupOpen}
                   onClose={closePopupRegistration}
                   isSuccess={isRegistrationSuccess}
@@ -216,7 +242,18 @@ function App() {
           <Route
             path="/sign-in"
             element={
-              <Login/>
+              <>
+                <Login
+                  handleLogin={handleLogin}
+                />
+
+                <InfoTooltip
+                  name={'info-login'}
+                  isOpen={isInfoTooltipPopupOpen}
+                  onClose={closeAllPopups}
+                  isSuccess={false}
+                />
+              </>
             }
           />
 
