@@ -20,7 +20,7 @@ class Auth {
         password: userPassword,
         email: userEmail,
       })
-    });
+    }).then(this._gerResponseJson);
   }
 
 
@@ -32,7 +32,7 @@ class Auth {
         password: userPassword,
         email: userEmail,
       })
-    });
+    }).then(this._gerResponseJson);
   }
 
   tokenCheck(token) {

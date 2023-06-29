@@ -133,6 +133,7 @@ function App() {
         }
         setIsInfoTooltipPopupOpen(true);
       })
+      .catch(err => console.log(err));
   };
 
   const closePopupRegistration = () => {
@@ -163,6 +164,7 @@ function App() {
           setIsInfoTooltipPopupOpen(true);
         }
       })
+      .catch(err => console.log(err));
   }
 
   const handleLogOut = () => {
