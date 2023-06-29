@@ -37,6 +37,7 @@ function App() {
   }
 
   React.useEffect(() => {
+    tokenCheck();
     Promise.all([api.getInitialCards(), api.getUserInfo()])
       .then(([dataCards, dataUser]) => {
         handleCardsChange(dataCards);
@@ -146,7 +147,13 @@ function App() {
     return auth
       .signIn(userEmail, userPassword)
       .then((res) => {
+
         if (res.ok) {
+          res.json().then((data) => {
+            if (data.token) {
+              localStorage.setItem('jwt', data.token);
+            }
+          });
           setLoggedIn(true);
           setUserData({
             email: userEmail,
@@ -160,12 +167,30 @@ function App() {
 
   const handleLogOut = () => {
     setUserData({
-      email: "",
+      email: '',
     });
+    localStorage.removeItem('jwt');
     setLoggedIn(false);
-    navigate("/sign-in");
+    navigate('/sign-in');
   };
 
+  const tokenCheck = () => {
+    if (localStorage.getItem('jwt')) {
+      const jwt = localStorage.getItem('jwt');
+      auth
+        .tokenCheck(jwt)
+        .then((res) => {
+          if (res) {
+            setUserData({
+              email: res.data.email,
+            });
+            setLoggedIn(true);
+            navigate('/', { replace: true });
+          }
+        })
+        .catch((err) => console.log(err));
+    }
+  }
 
   return (
     <CurrentUserContext.Provider value={currentUser}>

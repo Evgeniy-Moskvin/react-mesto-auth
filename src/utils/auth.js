@@ -4,6 +4,13 @@ class Auth {
     this.headers = options.headers;
   }
 
+  _gerResponseJson(res) {
+    if (res.ok) {
+      return res.json();
+    }
+
+    return Promise.reject(`Ошибка: ${res.status}`);
+  }
 
   signUp(userEmail, userPassword) {
     return fetch(`${this.url}/signup`, {
@@ -28,6 +35,15 @@ class Auth {
     });
   }
 
+  tokenCheck(token) {
+    return fetch(`${this.url}/users/me`, {
+      method: 'GET',
+      headers: {
+        'Content-Type': 'application/json',
+        Authorization: `Bearer ${token}`,
+      },
+    }).then(this._gerResponseJson);
+  }
 
 }
 
